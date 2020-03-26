@@ -9,18 +9,22 @@ window.addEventListener("load", function() {
      let cargoMassInput = document.querySelector("input[name=cargoMass]");
      
      //for testing expediency only
-     pilotNameInput.value = "G";
-     copilotNameInput.value = "H"
-     fuelLevelInput.value = 25000;
-     cargoMassInput.value = 2500;
+     //pilotNameInput.value = "G";
+     //copilotNameInput.value = "H"
+     //fuelLevelInput.value = 25000;
+     //cargoMassInput.value = 2500;
+
+     //document.getElementById("faultyItems").style.visibility = "invisible";
       
       if (pilotNameInput.value === "" || copilotNameInput.value === "" || fuelLevelInput.value === "" || cargoMassInput.value === "") {
          alert("All fields are required!");
-         event.preventDefault();
+         document.getElementById("faultyItems").style.visibility = "invisible";
+         //event.preventDefault();
       }
       else if(isNaN(Number(fuelLevelInput.value)) || isNaN(Number(cargoMassInput.value))){
          alert("Please enter appropriate numbers for both the Fuel Level and the Cargo Mass");
-         event.preventDefault();
+         document.getElementById("faultyItems").style.visibility = "invisible";
+         //event.preventDefault();
       }
       else {
          document.getElementById("pilotStatus").innerHTML = `Pilot ${pilotNameInput.value} is ready to launch`
@@ -33,12 +37,20 @@ window.addEventListener("load", function() {
             document.getElementById("launchStatus").style.color = "red";
             if (fuelLevelInput.value < 10000){
                document.getElementById("fuelStatus").innerHTML = `Fuel level of ${fuelLevelInput.value} liters is too low to launch!`;
-            }
+            } 
+            // if(fuelLevelInput.value >= 10000){
+            //    document.getElementById("fuelStatus").innerHTML = `Fuel level high enough for launch`;
+            // }
             if (cargoMassInput.value > 10000){
                document.getElementById("cargoStatus").innerHTML = `Cargo mass of ${cargoMassInput.value} kg is too high to launch!`;
-            }         
+            }
+            // if(cargoMassInput.value <= 10000){
+            //    document.getElementById("cargoStatus").innerHTML = `Cargo mass low enough for launch`;
+            // }        
          }
          else {
+            document.getElementById("fuelStatus").innerHTML = `Fuel level high enough for launch`;
+            document.getElementById("cargoStatus").innerHTML = `Cargo mass low enough for launch`;
             document.getElementById("launchStatus").innerHTML = `Shuttle Is Ready For Launch`;
             document.getElementById("launchStatus").style.color = "green";
          }
@@ -48,17 +60,18 @@ window.addEventListener("load", function() {
       fetch("https://handlers.education.launchcode.org/static/planets.json").then( function(response) {
          response.json().then( function(json) {
             const div = document.getElementById("missionTarget");
+            const mysteryPlanet = Math.floor(Math.random() *6);
             // Add HTML that includes the JSON data
             div.innerHTML = `
             <h2>Mission Destination</h2>
             <ol>
-               <li>Name: ${json[1].name}</li>
-               <li>Diameter: ${json[1].diameter}</li>
-               <li>Star: ${json[1].star}</li>
-               <li>Distance from Earth: ${json[1].distance}</li>
-               <li>Number of Moons: ${json[1].moons}</li>
+               <li>Name: ${json[mysteryPlanet].name}</li>
+               <li>Diameter: ${json[mysteryPlanet].diameter}</li>
+               <li>Star: ${json[mysteryPlanet].star}</li>
+               <li>Distance from Earth: ${json[mysteryPlanet].distance}</li>
+               <li>Number of Moons: ${json[mysteryPlanet].moons}</li>
             </ol>
-            <img src="${json[1].image}">
+            <img src="${json[mysteryPlanet].image}">
             `;
          });
       });
